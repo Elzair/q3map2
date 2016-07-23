@@ -32,6 +32,8 @@
 #include <cmath>
 #include <stdio.h>
 #include <string.h>
+#undef min
+#undef max
 #include <algorithm>
 
 #include "generic/arrayrange.h"
