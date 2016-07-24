@@ -229,6 +229,39 @@ static void LoadPNGBuffer( byte *buffer, int size, byte **pixels, int *width, in
 
 
 /*
+   LoadWEBPBuffer()
+   loads a webp file buffer into a valid rgba image
+ */
+
+static void LoadWEBPBuffer( byte *buffer, int size, byte **pixels, int *width, int *height ){
+
+	int image_width;
+	int image_height;
+	
+	if ( !WebPGetInfo( buffer, ( size_t) size, &image_width, &image_height ) )
+	{
+		Sys_Printf( "WARNING: An error occurred reading WEBP image info\n" );
+		return;
+	}
+	    
+	/* create image pixel buffer */
+	*pixels = safe_malloc( image_width * image_height * 4 );
+	*width = image_width;
+	*height = image_height;
+	
+	int out_stride = image_width  * 4;
+	int out_size =  image_height * out_stride;
+	
+        if ( !WebPDecodeRGBAInto( buffer, (size_t) size, *pixels, out_size, out_stride ) )
+        {
+		Sys_Printf( "WARNING: An error occurred reading WEBP image\n" );
+                return;
+        }       
+}
+
+
+
+/*
    ImageInit()
    implicitly called by every function to set up image list
  */
@@ -439,6 +472,17 @@ image_t *ImageLoad( const char *filename ){
 					if ( size > 0 ) {
 						LoadKTXBufferFirstImage( buffer, size, &image->pixels, &image->width, &image->height );
 					}
+          else
+          {
+            /* attempt to load webp */
+            StripExtension( name );
+            strcat( name, ".webp" );
+            size = vfsLoadFile( (const char*) name, (void**) &buffer, 0 );
+            if ( size > 0 )
+            {
+              LoadWEBPBuffer( buffer, size, &image->pixels, &image->width, &image->height );
+            }
+          }
 				}
 			}
 		}

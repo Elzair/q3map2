@@ -28,6 +28,9 @@ include_directories(${LIBXML2_INCLUDE_DIR})
 find_package(ZLIB REQUIRED)
 include_directories(${ZLIB_INCLUDE_DIRS})
 
+find_package(WEBP REQUIRED)
+include_directories(${WEBP_INCLUDE_DIRS})
+
 set(q3map2_games
         q3map2/game_darkplaces.h
         q3map2/game_dq.h
@@ -123,6 +126,7 @@ target_link_libraries(q3map2
         ${PNG_LIBRARIES}
         ${LIBXML2_LIBRARIES}
         ${ZLIB_LIBRARIES}
+        ${WEBP_LIBRARIES}
         ddslib
         etclib
         filematch
