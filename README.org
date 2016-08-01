@@ -1,0 +1,3 @@
+* Q3Map2
+
+This program takes an idTech3-style  /.map/ file and spits out a /.bsp/ file suitable for loading into many different engines based on idTech3. 
